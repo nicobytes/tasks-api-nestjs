@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+
+import { Category } from './category.entity';
 
 @Entity()
 export class Task {
@@ -10,4 +18,16 @@ export class Task {
 
   @Column({ default: false })
   completed: boolean;
+
+  @ManyToMany(() => Category, (category) => category.tasks)
+  @JoinTable({
+    name: 'tasks_categories',
+    joinColumn: {
+      name: 'task_id',
+    },
+    inverseJoinColumn: {
+      name: 'category_id',
+    },
+  })
+  categories: Category[];
 }
